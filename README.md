@@ -1,7 +1,7 @@
 # trashBot
 This is a Discord trash bot to keep track of roommate agreement
 
-![trashBot pfp](https://github.com/SamuelWang05/trashBot/blob/main/trashBot_img.jpg)
+<img src="https://github.com/SamuelWang05/trashBot/blob/main/trashBot_img.jpg" width="300" />
 
 Despite our best attemps, a whiteboard to keep track of who should take out the trash was not successful. Thus, the trashBot was born.
 
@@ -14,9 +14,9 @@ Some functionality that may be added in the future:
 - !steal: Take out the trash before the designated person for the week to climb up the leaderboards
 
 Here are the available commands:
-    **!start** - Start the weekly pinger.
-    **!stop** - Stop the weekly pinger.
-    **!complete** - Mark your task as complete.
-    **!who** - See who's turn it is to take out the trash.
-    **!debt** - List all users' debt.
-    **!commands** - List all available commands.
+**!start** - Start the weekly pinger.
+**!stop** - Stop the weekly pinger.
+**!complete** - Mark your task as complete.
+**!who** - See who's turn it is to take out the trash.
+**!debt** - List all users' debt.
+**!commands** - List all available commands.
