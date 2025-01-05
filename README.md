@@ -1,7 +1,7 @@
 # trashBot
 This is a Discord trash bot to keep track of roommate agreement
 
-![alt text]([https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true](https://github.com/SamuelWang05/trashBot/blob/main/trashBot_img.jpg))
+![trashBot pfp](https://github.com/SamuelWang05/trashBot/blob/main/trashBot_img.jpg)
 
 Despite our best attemps, a whiteboard to keep track of who should take out the trash was not successful. Thus, the trashBot was born.
 
