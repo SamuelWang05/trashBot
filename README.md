@@ -7,13 +7,7 @@ Despite our best attemps, a whiteboard to keep track of who should take out the 
 
 The trashBot pings one user (out of the 10 roommates) every Sunday at 8am. If they do not take out the trash by next week Sunday 8am, they accumulate "debt". Debt means that they have to take out trash for the next week as well!
 
-Some functionality that may be added in the future:
-- !sweep: By completing a sweeping on the first/second floor, you can reduce your debt by 1 per floor
-- !remind: Set a reminder for yourself to take out the trash. Customize the time to remind yourself
-- !leaderboard: Point system for taking out the trash. Points awarded for least debt, etc.
-- !steal: Take out the trash before the designated person for the week to climb up the leaderboards
-
-Here are the available commands:
+#List of currently available commands
 
 **!start** - Start the weekly pinger.
 
@@ -26,3 +20,9 @@ Here are the available commands:
 **!debt** - List all users' debt.
 
 **!commands** - List all available commands.
+
+#Potential Future Functionality
+- !sweep: By completing a sweeping on the first/second floor, you can reduce your debt by 1 per floor
+- !remind: Set a reminder for yourself to take out the trash. Customize the time to remind yourself
+- !leaderboard: Point system for taking out the trash. Points awarded for least debt, etc.
+- !steal: Take out the trash before the designated person for the week to climb up the leaderboards
