@@ -14,9 +14,15 @@ Some functionality that may be added in the future:
 - !steal: Take out the trash before the designated person for the week to climb up the leaderboards
 
 Here are the available commands:
+
 **!start** - Start the weekly pinger.
+
 **!stop** - Stop the weekly pinger.
+
 **!complete** - Mark your task as complete.
+
 **!who** - See who's turn it is to take out the trash.
+
 **!debt** - List all users' debt.
+
 **!commands** - List all available commands.
