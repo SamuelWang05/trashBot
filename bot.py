@@ -114,31 +114,59 @@ async def stop(ctx):
 
 @bot.command()
 async def complete(ctx):
-    """Mark the current user's task as complete and reduce their debt."""
-    global pending_user
+    """Mark the current user's task as complete, reduce their debt, and assign the task to the next user only if an image is attached."""
+    global pending_user, current_index
+
+    # Check if there is an attachment in the message
+    if not ctx.message.attachments:
+        await ctx.send("You must attach a photo as proof of task completion. Please try again with a picture!")
+        return
+
+    # Validate that the attachment is an image (including compatibility with common formats)
+    supported_image_types = {"image/png", "image/jpeg", "image/webp", "image/heic", "image/heif"}
+    image_found = False
+
+    for attachment in ctx.message.attachments:
+        if attachment.content_type and attachment.content_type.lower() in supported_image_types:
+            image_found = True
+            break
+
+    if not image_found:
+        await ctx.send(
+            "The attached file must be an image (PNG, JPEG, WebP, or iPhone-compatible formats like HEIC). "
+            "Please try again with a valid photo!"
+        )
+        return
 
     if pending_user is None:
         await ctx.send("No task is currently assigned to a user.")
         return
 
+    # Congratulate the current user
+    user = await bot.fetch_user(pending_user)
     if user_debts[pending_user] > 0:
         user_debts[pending_user] -= 1
-        user = await bot.fetch_user(pending_user)  # Fetch the user by their ID
         await ctx.send(f"Thank you <@{user.id}>! Your debt has been reduced to {user_debts[pending_user]} week(s).")
     else:
-        user = await bot.fetch_user(pending_user)  # Fetch the user by their ID
         await ctx.send(f"Congratulations <@{user.id}> on completing your task! 🎉 You have no outstanding debt.")
 
-    pending_user = None
+    # Advance to the next person in the list
+    current_index = (current_index + 1) % len(users_to_ping)
+    pending_user = users_to_ping[current_index]
+    next_user = await bot.fetch_user(pending_user)
+
+    # Notify the next person
+    await ctx.send(f"Hello <@{next_user.id}>, you're up next to take out the trash! You now have the remainder of this week until next Sunday at 8am.")
 
 @bot.command()
 async def who(ctx):
-    """Displays who’s turn it is to take out the trash this week without pinging or using @."""
+    """Displays who’s turn it is to take out the trash this week, considering the updated assignment after !complete."""
     global pending_user
+
     if pending_user is None:
         await ctx.send("No one is currently assigned to take out the trash this week.")
     else:
-        # Find the username from the user ID
+        # Fetch the user currently assigned
         user = await bot.fetch_user(pending_user)
         await ctx.send(f"It's {user.name}'s turn to take out the trash this week.")
 
@@ -153,16 +181,48 @@ async def debt(ctx):
 
 @bot.command()
 async def commands(ctx):
-    """Lists all available commands."""
+    """Lists all available commands with updated descriptions."""
     command_list = """
-    **!start** - Start the weekly pinger.
+    **!start** - Start the weekly pinger. Users will be pinged every Sunday at 8am.
     **!stop** - Stop the weekly pinger.
-    **!complete** - Mark your task as complete.
-    **!who** - See who's turn it is to take out the trash.
+    **!complete** - Mark your task as complete. You **must** attach a photo (PNG, JPEG, WebP, or HEIC) as proof of completion. Without a valid image, the task will not be marked complete.
+    **!who** - See whose turn it is to take out the trash this week. If the current task is marked as complete, the next person will be shown.
     **!debt** - List all users' debt.
+    **!next** - Manually advance to the next person in the list (admin-only).
+    **!set username** - Manually set the timer to a specific username (admin-only).
     **!commands** - List all available commands. Congrats, you just used this!
     """
     await ctx.send(command_list)
 
 # Run the bot
 bot.run(TOKEN)
+
+@bot.command()
+async def next(ctx):
+    """Manually advance to the next person in the list."""
+    global current_index, pending_user
+
+    # Increment the current index to move to the next user
+    current_index = (current_index + 1) % len(users_to_ping)
+    pending_user = users_to_ping[current_index]
+
+    # Fetch and notify the new user
+    user = await bot.fetch_user(pending_user)
+    await ctx.send(f"The weekly task has been passed to <@{user.id}>. It's now their turn to take out the trash!")
+
+@bot.command()
+async def set(ctx, username: str):
+    """Set the weekly timer to a specific user by their username."""
+    global current_index, pending_user
+
+    # Find the user by their username
+    for index, user_id in enumerate(users_to_ping):
+        user = await bot.fetch_user(user_id)
+        if user.name == username:
+            current_index = index
+            pending_user = user_id
+            await ctx.send(f"The weekly task has been manually assigned to {user.name}. It's now their turn to take out the trash!")
+            return
+
+    # If no match is found
+    await ctx.send(f"User {username} not found in the list.")
