@@ -194,9 +194,6 @@ async def commands(ctx):
     """
     await ctx.send(command_list)
 
-# Run the bot
-bot.run(TOKEN)
-
 @bot.command()
 async def next(ctx):
     """Manually advance to the next person in the list."""
@@ -226,3 +223,6 @@ async def set(ctx, username: str):
 
     # If no match is found
     await ctx.send(f"User {username} not found in the list.")
+
+# Run the bot
+bot.run(TOKEN)
